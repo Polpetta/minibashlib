@@ -3,18 +3,22 @@
 readonly MB_BASE_REPO_URL=https://github.com/Polpetta/minibashlib
 
 function load () {
-    set -e
+
+    # TODO: to download scripts directly from master
+    # use raw.githubusercontent.com
     
     local version=""
     
     if [ -z "$1" ]
     then
-        modules=()
-        modules+="logging"
-        modules+="assertions"
+        mb_modules=()
+        mb_modules+="logging"
+        mb_modules+="assertions"
         # load all the modules
-        for i in "${arr[@]}"
+        for i in "${mb_modules[@]}"
         do
+            echo "calling again myself: 1: $1, 2: $2, i: $i"
+            sleep 10
             load "$i" "$2"
         done
     fi
@@ -31,5 +35,4 @@ function load () {
     local module_path=$(mktemp)
     curl -s "$MB_BASE_REPO_URL/$final_repo_url/$2" > $module_path
 
-    set +e
 }
