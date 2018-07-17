@@ -23,7 +23,7 @@ function load () {
     if [ -z "$2" ]
     then
         version="latest"
-        final_repo_url="tree/master/modules"
+        final_repo_url="blob/master/modules"
     else
         version="$2"
     fi
