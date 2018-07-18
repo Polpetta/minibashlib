@@ -1,38 +1,50 @@
 #!/bin/bash
 
-readonly MB_BASE_REPO_URL=https://github.com/Polpetta/minibashlib
+readonly MB_RELEASE_REPO_URL=https://github.com/Polpetta/minibashlib
+readonly MB_RAW_REPO_URL=https://raw.githubusercontent.com/Polpetta/minibashlib
 
-function load () {
+# args:
+# - $1: module name - if blank all modules are fetched
+# - $2: module version - if blank modules are downloaded from master, otherwise
+#       a corrispective tag is downloaded, if possible
+function mb_load () {
 
-    # TODO: to download scripts directly from master
-    # use raw.githubusercontent.com
-    
     local version=""
-    
-    if [ -z "$1" ]
+    local module_name=$1
+    local module_version=$2
+
+    if [ -z "$module_name" ]
     then
-        mb_modules=()
-        mb_modules+="logging"
-        mb_modules+="assertions"
+        local mb_modules=()
+        mb_modules+=("logging")
+        mb_modules+=("assertions")
         # load all the modules
-        for i in "${mb_modules[@]}"
+        local mb_modules_size=$((${#mb_modules[@]} - 1))
+        for i in $(seq 0 $mb_modules_size)
         do
-            echo "calling again myself: 1: $1, 2: $2, i: $i"
-            sleep 10
-            load "$i" "$2"
+            module_name=${mb_modules[$i]}
+            mb_load "$module_name" "$2"
         done
-    fi
-
-    local final_repo_url=""
-    if [ -z "$2" ]
-    then
-        version="latest"
-        final_repo_url="blob/master/modules"
     else
-        version="$2"
+        local file_to_load=""
+        if [ -z "$2" ]
+        then
+            version="master"
+            file_to_load=$(_mb_download_module "$MB_RAW_REPO_URL/$version/modules/$1.sh")
+        else
+            version="$2"
+            file_to_load=$(_mb_download_module "$MB_BASE_REPO_URL/releases/$2/$1.sh")
+        fi
+
+        . $file_to_load
+
     fi
 
-    local module_path=$(mktemp)
-    curl -s "$MB_BASE_REPO_URL/$final_repo_url/$2" > $module_path
+}
 
+function _mb_download_module () {
+    local module_path=$(mktemp)
+    curl -s "$1" > $module_path
+
+    echo "$module_path"
 }
