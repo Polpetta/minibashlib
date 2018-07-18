@@ -45,7 +45,7 @@ function install_ubuntu () {
 }
 
 function install () {
-    local package_list="$1"
+    local package_list=( "$@" )
     
     if [ -z "$MB_DISTRO" ]
     then
@@ -54,10 +54,10 @@ function install () {
 
     case "$MB_DISTRO" in
         "ubuntu")
-            install_ubuntu "$package_list"
+            install_ubuntu "${package_list[@]}"
             ;;
         "centos")
-            install_centos "$package_list"
+            install_centos "${package_list[@]}"
             ;;
         *)
             _die "Package installation on this distro is not supported yet"
