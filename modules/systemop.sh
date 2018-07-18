@@ -37,11 +37,11 @@ function get_distro () {
 }
 
 function install_centos () {
-    $CMD yum install -y "$1"
+    $CMD yum install -y $@
 }
 
 function install_ubuntu () {
-    $CMD apt-get install -y "$1"
+    $CMD apt-get install -y $@
 }
 
 function install () {
