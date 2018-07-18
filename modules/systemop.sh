@@ -4,7 +4,7 @@ MB_DISTRO=""
 CMD=""
 
 function _die () {
-    echo $1
+    echo "$1"
     exit 1
 }
 
