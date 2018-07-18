@@ -18,6 +18,7 @@ function mb_load () {
         local mb_modules=()
         mb_modules+=("logging")
         mb_modules+=("assertions")
+        mb_modules+=("systemop")
         # load all the modules
         local mb_modules_size=$((${#mb_modules[@]} - 1))
         for i in $(seq 0 $mb_modules_size)
