@@ -22,7 +22,9 @@ able to run admin commands"
 function detect_distro () {
     if [ -f /etc/os-release ]
     then
-        echo "$(cat /etc/os-release | grep ID= | cut -d'=' -f2 | head -n1)"
+        local res="$(cat /etc/os-release | grep ID= | cut -d'=' -f2 | head -n1)"
+        # removes extra double quotes
+        echo $(echo $res | sed "s/^\(\"\)\(.*\)\1\$/\2/g")
     fi
 }
 
