@@ -44,6 +44,35 @@ function install_ubuntu () {
     $CMD apt-get install -y $@
 }
 
+function update_ubuntu () {
+    $CMD apt-get update
+    $CMD apt-get upgrade -y
+    $CMD apt-get autoclean
+    $CMD apt-get autoremove -y
+}
+
+function update_centos () {
+    $CMD yum upgrade -y
+}
+
+function update () {
+    if [ -z "$MB_DISTRO" ]
+    then
+        set_distro "$(detect_distro)"
+    fi
+
+    case "$MB_DISTRO" in
+        "ubuntu")
+            update_ubuntu
+            ;;
+        "centos")
+            update_centos
+            ;;
+        *)
+            _die "Package installation on this distro is not supported yet"
+    esac
+}
+
 function install () {
     local package_list=( "$@" )
     
