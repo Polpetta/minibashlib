@@ -9,7 +9,7 @@ readonly MB_RAW_REPO_URL=https://raw.githubusercontent.com/Polpetta/minibashlib
 #       a corrispective tag is downloaded, if possible
 function mb_load () {
 
-    local version=""
+    local version
     local module_name=$1
     local module_version=$2
 
@@ -27,7 +27,7 @@ function mb_load () {
             mb_load "$module_name" "$2"
         done
     else
-        local file_to_load=""
+        local file_to_load
         if [ -z "$2" ]
         then
             version="master"
