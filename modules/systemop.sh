@@ -22,7 +22,7 @@ able to run admin commands"
 function detect_distro () {
     if [ -f /etc/os-release ]
     then
-        echo "$(cat /etc/os-release | grep ID= | cut -d'=' -f2)"
+        echo "$(cat /etc/os-release | grep ID= | cut -d'=' -f2 | head -n1)"
     fi
 }
 
