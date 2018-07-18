@@ -54,7 +54,7 @@ function install () {
             install_centos "$package_list"
             ;;
         *)
-            _die "Packages installation in this distro is not supported yet"
+            _die "Package installation on this distro is not supported yet"
     esac
 }
 
