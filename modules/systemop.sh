@@ -140,4 +140,63 @@ function exec_root_func ()
     echo $sudo_exit_code
 }
 
+# The following code was taken from https://www.maketecheasier.com/ssh-pipes-linux/
+# Exec a script remotely
+# - $1: remote username
+# - $2: machine ip
+# - $3: path to the script
+# - $4: optional ssh arguments
+function exec_script_remotely () {
+    local readonly remote_user="$1"
+    local readonly remote_ip="$2"
+    local readonly script_path="$3"
+    local readonly opt_args="$4"
+
+    ssh $remote_user@$remote_ip "$opt_args" 'bash -s' < $script_path
+}
+
+# Send a file to the remote machine
+# - $1: remote username
+# - $2: machine ip
+# - $3: path to the file
+# - $4: remote filename
+# - $5: optional ssh arguments
+function send_file_to_remote () {
+    local readonly remote_user="$1"
+    local readonly remote_ip="$2"
+    local readonly file_path="$3"
+    local readonly opt_args="$5"
+    local remote_filename="$4"
+
+    if [ -z "$remote_filename" ]
+    then
+        remote_filename="remote"
+    fi
+
+    cat $file_path | ssh $remote_user@$remote_ip "$opt_args" "cat > $remote_filename"
+
+}
+
+# Download a file from a remote host
+# - $1: remote username
+# - $2: machine ip
+# - $3: path to the file
+# - $4: remote filename
+# - $5: optional ssh arguments
+function download_file_from_remote () {
+    local readonly remote_user="$1"
+    local readonly remote_ip="$2"
+    local readonly file_path="$3"
+    local readonly opt_args="$5"
+    local remote_filename="$4"
+
+    if [ -z "$remote_filename" ]
+    then
+        remote_filename="remote"
+    fi
+
+    ssh $remote_user@$remote_ip "$opt_args" "cat > $remote_filename" < $file_path
+}
+
+
 _check_if_sudo_needed
